@@ -31,13 +31,12 @@
                     <label class="radio-inline">
                         <input type="radio" name="containsPeople"
                                id="containsPeople"
-                               value="containsPeople" onclick="hiddenControl()">
+                               value="Yes" onclick="hiddenControl()">
                         Yes
                     </label>
                     <label class="radio-inline">
                         <input type="radio" name="containsPeople"
-                               value="containsNoPeople"
-                               onclick="hiddenControl()">
+                               value="No">
                         No
                     </label>
                 </label>
@@ -47,13 +46,16 @@
                     <label for="focusedPeopleAmount">
                         How many focal subjects are in the picture?
                         <input type="text" id="focusedPeopleAmount"
-                               class="form-control"> </label>
+                               name="focalSubjects"
+                               class="form-control">
+                    </label>
                 </div>
 
                 <div class="form-group">
                     <label for="unfocusedPeopleAmount">
                         How many non-focal subjects are in the picture?
                         <input type="text" id="unfocusedPeopleAmount"
+                               name="nonFocalSubjects"
                                class="form-control">
                     </label>
                 </div>

@@ -32,8 +32,8 @@ def initialise_pictures():
         return render_template('eval.html', data=d)
 
     if request.method == 'POST':
-        database.insert_picture_data(request.form)
-        redirect(url_for('initialise_pictures'))
+        # database.insert_picture_data(request.form)
+        return render_template('dump.html', data=request.form)
 
 
 @app.route('/dropdown/', methods=['GET'])
@@ -41,7 +41,7 @@ def dropdown_mockup():
     d = dict()
     d['user_ids'] = database.get_user_ids()
 
-    return render_template('dropdown.html', d=d)
+    return render_template('dropdown.html', data=d)
 
 if __name__ == '__main__':
     app.run(debug=True)
