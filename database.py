@@ -82,7 +82,7 @@ def count_unevaluated_pictures():
 
     return c.execute(
             "SELECT count(*) FROM pictures WHERE evaluated = 0 AND name != ''") \
-        .fetchall()
+        .fetchall()[0][0]
 
 
 def insert_picture_data(form):
@@ -90,3 +90,11 @@ def insert_picture_data(form):
     picture_name = form['picture_name']
     focused_people = form['amount_focused_people']
     unfocued_people = form['amount_unfocused_people']
+
+
+def get_user_ids():
+    conn = init_db()
+    c = conn.cursor()
+
+    raw_data = c.execute("SELECT DISTINCT username FROM pictures").fetchall()
+    return [t[0] for t in raw_data]

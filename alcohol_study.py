@@ -10,7 +10,7 @@ def index():
 
     d = dict()
     d["is_evaluation_complete"] = True if pictures_left == 0 else False
-    d["pictures_left"] = pictures_left[0][0]
+    d["pictures_left"] = pictures_left
     return render_template('index.html', data=d)
 
 
@@ -34,6 +34,14 @@ def initialise_pictures():
     if request.method == 'POST':
         database.insert_picture_data(request.form)
         redirect(url_for('initialise_pictures'))
+
+
+@app.route('/dropdown/', methods=['GET'])
+def dropdown_mockup():
+    d = dict()
+    d['user_ids'] = database.get_user_ids()
+
+    return render_template('dropdown.html', d=d)
 
 if __name__ == '__main__':
     app.run(debug=True)
