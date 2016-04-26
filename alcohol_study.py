@@ -10,7 +10,7 @@ def index():
 
     d = dict()
     d["is_evaluation_complete"] = True if pictures_left == 0 else False
-    d["pictures_left"] = pictures_left
+    d["pictures_left"] = pictures_left[0][0]
     return render_template('index.html', data=d)
 
 
@@ -27,9 +27,9 @@ def survey():
 def initialise_pictures():
     if request.method == 'GET':
         d = dict()
-        d['picture'] = database.get_next_picture()
+        d['picture_name'] = database.get_next_picture()[0][0]
 
-        return render_template('eval.html', data=data)
+        return render_template('eval.html', data=d)
 
     if request.method == 'POST':
         database.insert_picture_data(request.form)
