@@ -74,6 +74,7 @@ def insert_picture(c: sq.Connection,
                     username])
 
     c.commit()
+    c.close()
 
 
 def count_unevaluated_pictures():
@@ -86,10 +87,26 @@ def count_unevaluated_pictures():
 
 
 def insert_picture_data(form):
-    shows_people = form['visible_people']
+    shows_people = form['containsPeople']
     picture_name = form['picture_name']
-    focused_people = form['amount_focused_people']
-    unfocued_people = form['amount_unfocused_people']
+    focused_people = form['focalSubjects']
+    nonfocused_people = form['nonFocalSubjects']
+
+    c = init_db()
+    cur = c.cursor()
+
+    cur.execute("""
+    INSERT INTO picture_evaluation_data VALUES (?, ?, ?, ?)
+    """, [picture_name, shows_people, focused_people, nonfocused_people])
+
+    c.commit()
+
+    cur.execute("""
+    UPDATE pictures set evaluated = 1 WHERE name=?
+    """, [picture_name])
+
+    c.commit()
+    c.close()
 
 
 def get_user_ids():

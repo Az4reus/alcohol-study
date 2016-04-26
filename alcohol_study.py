@@ -32,7 +32,7 @@ def initialise_pictures():
         return render_template('eval.html', data=d)
 
     if request.method == 'POST':
-        # database.insert_picture_data(request.form)
+        database.insert_picture_data(request.form)
         return redirect(url_for('initialise_pictures'))
 
 
