@@ -15,7 +15,7 @@
 <body>
 <div class="fluid-container">
     <div class="fluid-row col-md-8 col-md-offset-1">
-        <h2><a href="{{ url_for('index') }}">&lt;— Back to index.</a></h2>
+        <h2><a href="{{ url_for('index') }}">&lt; Index.</a></h2>
     </div>
 
     <div class="row">
@@ -24,8 +24,8 @@
                  class="img-responsive center-block img-thumbnail"/>
         </div>
 
-        <form target="{{ url_for('initialise_pictures') }}" method="post"
-              class="form-horizontal col-md-2">
+        <form action="{{ url_for('initialise_pictures') }}" method="post"
+              class="form-horizontal col-md-2" target="_self">
             <div class="form-group">
                 <label>Does this image contain people? <br>
                     <label class="radio-inline">
