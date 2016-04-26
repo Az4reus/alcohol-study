@@ -7,8 +7,8 @@
     <title>Alcohol Study -- Index</title>
 </head>
 <body>
-<div class="row col-md-offset-4">
-    <div class="container center">
+<div class="row">
+    <div class="container col-md-12 text-center">
         <h1>Alcohol Study</h1>
     </div>
 </div>
@@ -16,7 +16,7 @@
 <div class="container-fluid">
     {% if not data["is_evaluation_complete"] %}
         <div class="row">
-            <div class="container col-md-8 col-md-offset-2">
+            <div class="col-md-6 col-md-offset-3">
                 <h2>
                     There are {{ data["pictures_left"] }} pictures left to
                     evaluate.<br>
@@ -31,13 +31,13 @@
     {% endif %}
 
     <div class="row">
-        <div class="col-md-6 center container col-md-offset-2">
+        <div class="col-md-6 center container col-md-offset-3">
             <form action="{{ url_for('survey') }}" method="post" class="input">
                 <div class="form-group">
                     <label for="subject_id">Start run for subject:</label>
-                    <input type="text" name="subject_id" class="">
-                    <input type="submit" class="btn btn-primary">
+                    <input type="text" name="subject_id" class="form-control">
                 </div>
+                <input type="submit" class="btn btn-primary">
             </form>
         </div>
     </div>
