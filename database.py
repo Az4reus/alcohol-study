@@ -102,7 +102,7 @@ def insert_picture_data(form):
     c.commit()
 
     cur.execute("""
-    UPDATE pictures set evaluated = 1 WHERE name=?
+    UPDATE pictures SET evaluated = 1 WHERE name=?
     """, [picture_name])
 
     c.commit()
@@ -114,4 +114,15 @@ def get_user_ids():
     c = conn.cursor()
 
     raw_data = c.execute("SELECT DISTINCT username FROM pictures").fetchall()
+    return [t[0] for t in raw_data]
+
+
+def get_pictures_for_user(user_id):
+    conn = init_db()
+    cur = conn.cursor()
+
+    raw_data = cur.execute(
+        "SELECT name FROM pictures WHERE username=? AND name != ''",
+        [user_id])
+
     return [t[0] for t in raw_data]

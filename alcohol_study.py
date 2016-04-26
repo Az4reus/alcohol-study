@@ -17,7 +17,20 @@ def index():
 @app.route('/survey/', methods=['POST', 'GET'])
 def survey():
     if request.method == 'POST':
-        return request.form["subject_id"]
+        d = dict()
+        subject_id = request.form['subject_id']
+
+        # TODO rest of the model here.
+        d['user_id'] = subject_id
+
+        pictures = database.get_pictures_for_user(subject_id)
+
+        if not pictures:
+            return render_template('no_pictures_for_user.html', id=subject_id)
+
+        d['picture_name'] = pictures[0]
+
+        return render_template('survey.html', data=d)
 
     if request.method == 'GET':
         redirect(url_for('index'))
@@ -42,6 +55,7 @@ def dropdown_mockup():
     d['user_ids'] = database.get_user_ids()
 
     return render_template('dropdown.html', data=d)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
