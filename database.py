@@ -126,12 +126,23 @@ def get_user_ids():
     return [t[0] for t in raw_data]
 
 
-def get_pictures_for_user(user_id):
+def get_relevant_pictures_for_user(user_id):
     conn = init_db()
     cur = conn.cursor()
 
     raw_data = cur.execute(
-            "SELECT name FROM pictures WHERE username=? AND name != ''",
-            [user_id])
+            "SELECT name FROM pictures WHERE username=? AND name != '' AND evaluated = 1 AND obsolete = 0",
+            [user_id]).fetchall()
 
     return [t[0] for t in raw_data]
+
+
+def get_evaluation_data_for_picture(picture_file_name: str):
+    conn = init_db()
+    cur = conn.cursor()
+
+    raw_data = cur.execute(
+            "SELECT * FROM picture_evaluation_data WHERE picture_name = ?",
+            [picture_file_name]).fetchall()
+
+    return raw_data[0]

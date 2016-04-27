@@ -20,12 +20,97 @@
         <div class="col-md-4 col-md-offset-1">
             <form class="form-horizontal">
                 <div class="form-group">
-                    <label>
-                        Here be surveys. <br>
-                        <input type="submit" value="Submit"
-                               class="btn btn-primary">
+                    <h3>Task at hand</h3>
+                    <p class="form-control-static">
+                        This photo contains {{ data['focused_people'] }} focal
+                        subject{{ 's' if data['focused_people'] > 1 else '' }} —
+                        people who were
+                        looking in the general direction
+                        of the camera when you took the picture. You are going
+                        to
+                        answer a set of questions about each of the
+                        focal subjects in this picture. Right now, you should
+                        answer
+                        questions 1-12 about the first of these focal
+                        subjects. Take a moment to look at the picture and think
+                        about this person. If there are multiple focal
+                        subjects, start with the person furthest to the left in
+                        the
+                        photo.
+                    </p>
+                </div>
+
+                <div class="form-group">
+                    <h3>
+                        Who is this person?
+                    </h3>
+
+                    <label class="radio">
+                        <input type="radio" name="question1" id="q1_spouse"
+                        value="A romantic partner">
+                        A romantic partner (including spouse)
+                    </label>
+                    <label class="radio">
+                        <input type="radio" name="question1" id="q1_family"
+                        value="A family member">
+                        A family member (textbox goes here for specification)
+                    </label>
+                    <label class="radio">
+                        <input type="radio" name="question1" id="q1_close_friend"
+                        value="A close friend">
+                        A close friend.
+                    </label>
+                    <label class="radio">
+                        <input type="radio" name="question1" id="q1_friend"
+                        value="A friend">
+                        A friend.
+                    </label>
+                    <label class="radio">
+                        <input type="radio" name="question1" id="q1_acquaintance"
+                        value="An acquaintance">
+                        An acquaintance.
+                    </label>
+                    <label class="radio">
+                        <input type="radio" name="question1" id="q1_coworker"
+                        value="A coworker">
+                        A coworker (non-friend)
+                    </label>
+                    <label class="radio">
+                        <input type="radio" name="question1" id="q1_stranger"
+                        value="A stranger">
+                        A stranger I'd never met before this occasion
+                    </label>
+                    <label class="radio">
+                        <input type="radio" name="question1" id="q1_other"
+                        value="other">
+                        Other (text box goes here to specify)
                     </label>
                 </div>
+
+                <div class="form-group">
+                    <h3> Question 2: How long have you known this person? <br>
+                        <small>Text field entry for years goes here.</small>
+                    </h3>
+                </div>
+
+                <div class="form-group">
+                    <h3>
+                        Question 3: How long have you spent with the other
+                        person? <br>
+                        <small>Dropdown selector goes here.</small>
+                    </h3>
+                </div>
+
+                <div class="form-group">
+                    <h3>Questions 4-12 <br>
+                        <small>Block of inline radio buttons goes here.</small>
+                    </h3>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Submit"
+                           class="btn btn-primary">
+                </div>
+
             </form>
         </div>
     </div>

@@ -23,12 +23,17 @@ def survey():
         # TODO rest of the model here.
         d['user_id'] = subject_id
 
-        pictures = database.get_pictures_for_user(subject_id)
+        pictures = database.get_relevant_pictures_for_user(subject_id)
 
         if not pictures:
             return render_template('no_pictures_for_user.html', id=subject_id)
 
         d['picture_name'] = pictures[0]
+        eval_data = database.get_evaluation_data_for_picture(
+                d['picture_name'])
+
+        d['focused_people'] = eval_data[2]
+        d['unfocused_people'] = eval_data[3]
 
         return render_template('survey.html', data=d)
 
