@@ -10,7 +10,8 @@ def init_db() -> sq.Connection:
       name TEXT,
       link BLOB,
       evaluated BOOLEAN,
-      username TEXT
+      username TEXT,
+      obsolete BOOLEAN
     );
 
     CREATE TABLE IF NOT EXISTS picture_evaluation_data (
@@ -64,17 +65,18 @@ def insert_picture(c: sq.Connection,
                    name: str,
                    link: str,
                    username: str,
-                   evaluated: bool = 0):
+                   evaluated: bool = False,
+                   obsolete: bool = False):
     cursor = c.cursor()
 
-    cursor.execute("INSERT INTO pictures VALUES (?, ?, ?, ?);",
+    cursor.execute("INSERT INTO pictures VALUES (?, ?, ?, ?, ?);",
                    [name,
                     link,
                     1 if evaluated else 0,
-                    username])
+                    username,
+                    1 if obsolete else 0])
 
     c.commit()
-    c.close()
 
 
 def count_unevaluated_pictures():
@@ -91,6 +93,7 @@ def insert_picture_data(form):
     picture_name = form['picture_name']
     focused_people = form['focalSubjects']
     nonfocused_people = form['nonFocalSubjects']
+    obsolete = 'isObsolete' in form
 
     c = init_db()
     cur = c.cursor()
@@ -106,6 +109,12 @@ def insert_picture_data(form):
     """, [picture_name])
 
     c.commit()
+
+    if obsolete:
+        cur.execute("UPDATE pictures SET obsolete = 1 WHERE name = ?",
+                    [picture_name])
+        c.commit()
+
     c.close()
 
 
@@ -122,7 +131,7 @@ def get_pictures_for_user(user_id):
     cur = conn.cursor()
 
     raw_data = cur.execute(
-        "SELECT name FROM pictures WHERE username=? AND name != ''",
-        [user_id])
+            "SELECT name FROM pictures WHERE username=? AND name != ''",
+            [user_id])
 
     return [t[0] for t in raw_data]
