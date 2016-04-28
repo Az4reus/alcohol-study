@@ -4,6 +4,8 @@
           href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
           integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7"
           crossorigin="anonymous">
+    <script src="{{ url_for('static', filename='survey.js') }}"
+            type="application/javascript"></script>
     <title>Alcohol Study -- Survey</title>
 </head>
 <body>
@@ -47,42 +49,45 @@
 
                     <label class="radio">
                         <input type="radio" name="question1" id="q1_spouse"
-                        value="A romantic partner">
+                               value="A romantic partner">
                         A romantic partner (including spouse)
                     </label>
                     <label class="radio">
                         <input type="radio" name="question1" id="q1_family"
-                        value="A family member">
+                               value="A family member"
+                               onclick="addTextbox('q1_family')">
                         A family member (textbox goes here for specification)
                     </label>
                     <label class="radio">
-                        <input type="radio" name="question1" id="q1_close_friend"
-                        value="A close friend">
+                        <input type="radio" name="question1"
+                               id="q1_close_friend"
+                               value="A close friend">
                         A close friend.
                     </label>
                     <label class="radio">
                         <input type="radio" name="question1" id="q1_friend"
-                        value="A friend">
+                               value="A friend">
                         A friend.
                     </label>
                     <label class="radio">
-                        <input type="radio" name="question1" id="q1_acquaintance"
-                        value="An acquaintance">
+                        <input type="radio" name="question1"
+                               id="q1_acquaintance"
+                               value="An acquaintance">
                         An acquaintance.
                     </label>
                     <label class="radio">
                         <input type="radio" name="question1" id="q1_coworker"
-                        value="A coworker">
+                               value="A coworker">
                         A coworker (non-friend)
                     </label>
                     <label class="radio">
                         <input type="radio" name="question1" id="q1_stranger"
-                        value="A stranger">
+                               value="A stranger">
                         A stranger I'd never met before this occasion
                     </label>
                     <label class="radio">
                         <input type="radio" name="question1" id="q1_other"
-                        value="other">
+                               value="other">
                         Other (text box goes here to specify)
                     </label>
                 </div>
