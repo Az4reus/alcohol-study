@@ -1,4 +1,10 @@
+import os
 import sqlite3 as sq
+
+import time
+from werkzeug.utils import secure_filename
+
+import csv_reading
 
 
 def init_db() -> sq.Connection:
@@ -69,12 +75,18 @@ def insert_picture(c: sq.Connection,
                    obsolete: bool = False):
     cursor = c.cursor()
 
-    cursor.execute("INSERT INTO pictures VALUES (?, ?, ?, ?, ?);",
-                   [name,
-                    link,
-                    1 if evaluated else 0,
-                    username,
-                    1 if obsolete else 0])
+    try:
+        _ = cursor.execute("SELECT * FROM pictures WHERE name=?",
+                           [name]).fetchall()[0][0]
+
+    except IndexError:
+
+        cursor.execute("INSERT INTO pictures VALUES (?, ?, ?, ?, ?);",
+                       [name,
+                        link,
+                        1 if evaluated else 0,
+                        username,
+                        1 if obsolete else 0])
 
     c.commit()
 
@@ -146,3 +158,16 @@ def get_evaluation_data_for_picture(picture_file_name: str):
             [picture_file_name]).fetchall()
 
     return raw_data[0]
+
+
+def upload_csv(files, app_config):
+    csv_file = files['upload']
+    filename = secure_filename(csv_file) + str(int(time.time()))
+    if _allowed_file_name(filename):
+        csv_file.save(os.path.join(app_config, filename))
+
+    csv_reading.read_data_csv(os.path.join(app_config, filename))
+
+
+def _allowed_file_name(file_name):
+    return file_name.rsplit('.', 1)[1] == 'csv'

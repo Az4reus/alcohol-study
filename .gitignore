@@ -61,3 +61,6 @@ target/
 
 # Static assets need no git
 static/
+
+# csv files also don't need git
+*.csv
