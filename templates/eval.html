@@ -9,7 +9,7 @@
           crossorigin="anonymous">
 
     <script
-            src="{{ url_for('static', filename='hiddenControl.js') }}"
+            src="{{ url_for('static', filename='js/hiddenControl.js') }}"
             type="text/javascript"></script>
 </head>
 <body>
@@ -20,7 +20,7 @@
 
     <div class="row">
         <div class="col-md-8 col-md-offset-1">
-            <img src="{{ url_for('static', filename=data['picture_name']) }}"
+            <img src="{{ url_for('static', filename='img/' + data['picture_name']) }}"
                  class="img-responsive center-block img-thumbnail"/>
         </div>
 
@@ -44,7 +44,7 @@
             <div class="hidden" id="hiddenControl">
                 <div class="form-group">
                     <label for="focusedPeopleAmount">
-                        How many focal subjects are in the picture?
+                        How many focal individuals are in the picture?
                         <input type="text" id="focusedPeopleAmount"
                                name="focalSubjects"
                                class="form-control">
@@ -53,7 +53,7 @@
 
                 <div class="form-group">
                     <label for="unfocusedPeopleAmount">
-                        How many non-focal subjects are in the picture?
+                        How many non-focal individuals are in the picture?
                         <input type="text" id="unfocusedPeopleAmount"
                                name="nonFocalSubjects"
                                class="form-control">
