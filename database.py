@@ -116,7 +116,7 @@ def insert_picture_data(form):
     c.commit()
 
     cur.execute("""
-    UPDATE pictures SET evaluated = 1 WHERE name=?
+    UPDATE pictures SET evaluated = 1 WHERE link=?
     """, [picture_name])
 
     c.commit()
