@@ -14,7 +14,7 @@ def index():
     d = dict()
     d["is_evaluation_complete"] = True if pics_left == 0 else False
     d["pictures_left"] = pics_left
-    d['user_ids'] = database.get_user_ids()
+    d['user_ids'] = database.get_waiting_user_ids()
     return render_template('index.html', data=d)
 
 
@@ -35,18 +35,17 @@ def survey():
     if 'q2' in f:
         database.save_focal_survey_result(f)
 
-    pictures = database.get_relevant_pictures_for_user(f['subject_id'])
-    if not pictures:
+    picture = database.get_relevant_pictures_for_user(f['subject_id'])
+    if not picture:
         return render_template('no_pictures_for_user.html',
                                id=d['subject_id'])
 
-    d['picture_name'] = pictures[0]
-    picture_file = csv_reading.extract_name_from_url(d['picture_name'])
+    d['picture_name'] = picture
 
     d['focused_people'], d['unfocused_people'] = \
-        database.get_evaluation_data_for_picture(picture_file)
+        database.get_evaluation_data_for_picture(picture)
 
-    evals_left = database.get_evaluations_left(picture_file)
+    evals_left = database.get_evaluations_left(picture)
 
     if evals_left == 0 and 'nfDone' in f:
         database.save_nf_survey_result(f)

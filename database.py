@@ -60,7 +60,10 @@ def get_next_picture():
     cur = c.cursor()
 
     cur.execute("""
-    SELECT link FROM pictures WHERE evaluated = 0 AND name != '' LIMIT 1;
+    SELECT link FROM pictures
+    WHERE evaluated = 0
+    AND name != ''
+    LIMIT 1;
     """)
 
     return cur.fetchall()[0][0]
@@ -137,20 +140,38 @@ def get_user_ids():
     return [t[0] for t in raw_data]
 
 
+def get_waiting_user_ids():
+    conn = init_db()
+    c = conn.cursor()
+
+    raw_data = c.execute("""
+    SELECT DISTINCT username
+    FROM pictures INNER JOIN picture_evaluation_data
+      ON pictures.link = picture_evaluation_data.picture_name
+    WHERE
+    pictures.evaluated = 1
+    AND pictures.obsolete = 0
+    AND picture_evaluation_data.shows_people = 1
+    """).fetchall()
+
+    return [t[0] for t in raw_data]
+
+
 def get_relevant_pictures_for_user(user_id):
     conn = init_db()
     cur = conn.cursor()
 
     raw_data = cur.execute(
-            """SELECT pictures.name FROM pictures, picture_evaluation_data
+            """SELECT pictures.link
+            FROM pictures INNER JOIN picture_evaluation_data
+              ON pictures.link = picture_evaluation_data.picture_name
             WHERE pictures.username=?
-            AND pictures.name != ''
             AND pictures.evaluated = 1
-            AND pictures.obsolete = 0
-            AND picture_evaluation_data.shows_people = 'Yes'""",
+            AND picture_evaluation_data.shows_people = 1
+            LIMIT 1""",
             [user_id]).fetchall()
 
-    return [t[0] for t in raw_data]
+    return raw_data[0][0]
 
 
 def get_evaluation_data_for_picture(picture_file_name: str):
