@@ -6,7 +6,7 @@ def read_data_csv(path_to_csv: str):
     urlrow = 'Take a picture of your environment right now. Take a picture of what you see.'
     c = db.init_db()
 
-    with open(path_to_csv) as f:
+    with open(path_to_csv, encoding='utf-8-sig') as f:
         reader = csv.DictReader(f)
         for row in reader:
             db.insert_picture(

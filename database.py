@@ -2,7 +2,6 @@ import os
 import sqlite3 as sq
 
 import time
-from werkzeug.utils import secure_filename
 
 import csv_reading
 
@@ -101,7 +100,7 @@ def count_unevaluated_pictures():
 
 
 def insert_picture_data(form):
-    shows_people = form['containsPeople']
+    shows_people = True if form['containsPeople'] == 'Yes' else False
     picture_name = form['picture_name']
     focused_people = form['focalSubjects']
     nonfocused_people = form['nonFocalSubjects']
@@ -143,7 +142,12 @@ def get_relevant_pictures_for_user(user_id):
     cur = conn.cursor()
 
     raw_data = cur.execute(
-            "SELECT name FROM pictures WHERE username=? AND name != '' AND evaluated = 1 AND obsolete = 0",
+            """SELECT pictures.name FROM pictures, picture_evaluation_data
+            WHERE pictures.username=?
+            AND pictures.name != ''
+            AND pictures.evaluated = 1
+            AND pictures.obsolete = 0
+            AND picture_evaluation_data.shows_people = 'Yes'""",
             [user_id]).fetchall()
 
     return [t[0] for t in raw_data]
@@ -155,19 +159,97 @@ def get_evaluation_data_for_picture(picture_file_name: str):
 
     raw_data = cur.execute(
             "SELECT * FROM picture_evaluation_data WHERE picture_name = ?",
-            [picture_file_name]).fetchall()
+            [picture_file_name]).fetchall()[0]
 
-    return raw_data[0]
+    try:
+        fp = int(raw_data[2])
+    except ValueError:
+        fp = 0
+
+    try:
+        ufp = int(raw_data[3])
+    except ValueError:
+        ufp = 0
+
+    return fp, ufp
 
 
 def upload_csv(files, app_config):
     csv_file = files['upload']
-    filename = secure_filename(csv_file) + str(int(time.time()))
-    if _allowed_file_name(filename):
-        csv_file.save(os.path.join(app_config, filename))
+    filename = str(int(time.time())) + '.csv'
+    csv_file.save(os.path.join(app_config, filename))
 
     csv_reading.read_data_csv(os.path.join(app_config, filename))
 
 
 def _allowed_file_name(file_name):
     return file_name.rsplit('.', 1)[1] == 'csv'
+
+
+def get_evaluations_left(picture_name):
+    conn = init_db()
+    cur = conn.cursor()
+
+    left = cur.execute(
+            '''SELECT count(*)
+               FROM picture_focal_result_data
+               WHERE picture_name = ?''',
+            [picture_name]).fetchall()[0][0]
+
+    focal_subjects = cur.execute(
+        '''SELECT focused_people
+           FROM picture_evaluation_data
+           WHERE picture_name = ?''',
+        [picture_name]).fetchall()[0][0]
+
+    try:
+        focal_subjects = int(focal_subjects)
+    except ValueError:
+        focal_subjects = 0
+
+    return focal_subjects - left
+
+
+def save_focal_survey_result(f):
+    conn = init_db()
+    cur = conn.cursor()
+
+    picture_name = f['picture_name']
+    person_from_left = cur.execute(
+            """SELECT count(*)
+               FROM picture_focal_result_data
+               WHERE picture_name = ?""",
+            [picture_name]).fetchall()[0][0] + 1
+
+    q1 = f['q1']
+    q1_text = ''
+    if q1 == 'A family member' or q1 == 'other':
+        q1_text = f['q1_textbox']
+
+    q2 = f['q2']
+    if q2 == '':
+        q2 = 0
+
+    q3 = f['q3']
+    q4 = f['q4']
+    q5 = f['q5']
+    q6 = f['q6']
+    q7 = f['q7']
+    q8 = f['q8']
+    q9 = f['q9']
+    q10 = f['q10']
+    q11 = f['q11']
+    q12 = f['q12']
+
+    cur.execute("""
+    INSERT INTO picture_focal_result_data VALUES (?, ?, ?, ?, ?,
+     ?, ?, ?, ?, ?,
+     ?, ?, ?, ?, ?)
+  """, [picture_name, person_from_left, q1, q1_text, q2, q3, q4, q5, q6, q7, q8,
+        q9, q10, q11, q12])
+
+    conn.commit()
+
+
+def save_nf_survey_result(f):
+    pass

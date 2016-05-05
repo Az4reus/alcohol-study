@@ -11,8 +11,8 @@
 <body>
 <div class="container">
     <div class="row">
-        <div class="row col-md-offset-3">
-            <h1>Task for the following photograph: </h1>
+        <div class="row col-md-offset-4">
+            <h1>Non-focal Individuals</h1>
         </div>
         <div style="height: 10px;"></div>
         <div class="col-md-4 col-md-offset-2">
@@ -21,19 +21,14 @@
         </div>
         <div class="col-md-4">
             <div class="lead">
-                This photograph contains
-                <strong> {{ d['focused_people'] }} </strong>
-                “focal
-                individuals”—people who were
-                facing in the general direction of the camera at the time
-                the
-                photograph was taken. You are going to
-                answer a brief set of questions about each of these focal
-                individuals in turn. If the photograph
-                contains multiple focal individuals, you will start with the
-                focal
-                individual furthest towards the left and
-                work your way towards the right.
+                This photo contains
+                <strong> {{ d['unfocused_people'] }} </strong>
+                individuals who are in the
+                background
+                and are not really looking in the direction of the camera.
+                <div style="height: 20px;"></div>
+                Please indicate how many of these
+                individuals fall into the following categories.
             </div>
         </div>
 
@@ -47,8 +42,11 @@
                            value="{{ d['subject_id'] }}">
                     <input name="focused_people" type="hidden"
                            value="{{ d['focused_people'] }}">
-                    <input name="f_instructions" value="f_instructions"
-                           type="hidden">
+                    <input name="unfocused_people" type="hidden"
+                           value="{{ d['unfocused_people'] }}">
+                    <input name="picture_name" type="hidden"
+                           value="{{ d['picture_name'] }}">
+                    <input name="nfSurvey" value="nfSurvey" type="hidden">
 
                     <input type="submit" value="Okay!" class="btn btn-primary">
                 </form>

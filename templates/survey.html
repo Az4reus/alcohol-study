@@ -11,12 +11,12 @@
 <body>
 <div class="container">
     <div class="fluid-row col-md-10">
-        <h2>Survey for {{ data['user_id'] }} </h2>
+        <h2>Survey for {{ d['user_id'] }} </h2>
     </div>
 
     <div class="row">
         <div class="col-md-7">
-            <img src="{{ url_for('static', filename='img/' + data['picture_name']) }}"
+            <img src="{{ url_for('static', filename='img/' + d['picture_name']) }}"
                  class="img-responsive center-block img-thumbnail">
         </div>
         <div class="col-md-4 col-md-offset-1">
@@ -28,46 +28,46 @@
                     </h3>
 
                     <label class="radio">
-                        <input type="radio" name="question1" id="q1_spouse"
+                        <input type="radio" name="q1" id="q1_spouse"
                                value="A romantic partner">
                         A romantic partner (including spouse)
                     </label>
                     <label class="radio">
-                        <input type="radio" name="question1" id="q1_family"
+                        <input type="radio" name="q1" id="q1_family"
                                value="A family member"
-                               onclick="addTextbox('q1_family')">
+                               onclick="addTextbox('q1')">
                         A family member
                     </label>
                     <label class="radio">
-                        <input type="radio" name="question1"
+                        <input type="radio" name="q1"
                                id="q1_close_friend"
                                value="A close friend">
                         A close friend.
                     </label>
                     <label class="radio">
-                        <input type="radio" name="question1" id="q1_friend"
+                        <input type="radio" name="q1" id="q1_friend"
                                value="A friend">
                         A friend.
                     </label>
                     <label class="radio">
-                        <input type="radio" name="question1"
+                        <input type="radio" name="q1"
                                id="q1_acquaintance"
                                value="An acquaintance">
                         An acquaintance.
                     </label>
                     <label class="radio">
-                        <input type="radio" name="question1" id="q1_coworker"
+                        <input type="radio" name="q1" id="q1_coworker"
                                value="A coworker">
                         A coworker (non-friend)
                     </label>
                     <label class="radio">
-                        <input type="radio" name="question1" id="q1_stranger"
+                        <input type="radio" name="q1" id="q1_stranger"
                                value="A stranger">
                         A stranger I'd never met before this occasion
                     </label>
                     <label class="radio">
-                        <input type="radio" name="question1" id="q1_other"
-                               value="other" onclick="addTextbox('q1_other')">
+                        <input type="radio" name="q1" id="q1_other"
+                               value="other" onclick="addTextbox('q1')">
                         Other
                     </label>
                 </div>
@@ -78,7 +78,7 @@
                     </h3>
                     <label>
                         Time in years: <br>
-                        <input type="text" placeholder="0.5"
+                        <input type="text" placeholder="0.5" name="q2"
                                class="form-control">
                     </label>
                 </div>
@@ -88,7 +88,7 @@
                         3. How long have you spent with the other
                         person? <br>
                     </h3>
-                    <select name="q3_select" class="form-control">
+                    <select name="q3" class="form-control">
                         <option></option>
                         <option>0-2 hours. (You guys had just met)</option>
                         <option>2-10 hours. (You hung out or interacted a bunch
@@ -238,6 +238,10 @@
                     </select>
                 </div>
                 <div class="form-group">
+                    <input type="hidden" name="subject_id"
+                           value="{{ d['subject_id'] }}">
+                    <input type="hidden" name="picture_name"
+                           value="{{ d['picture_name'] }}">
                     <input type="submit" value="Submit"
                            class="btn btn-primary">
                 </div>

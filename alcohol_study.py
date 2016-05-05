@@ -16,42 +16,54 @@ def index():
     return render_template('index.html', data=d)
 
 
-@app.route('/instructions/', methods=['POST', 'GET'])
-def instructions():
-    if request.method == 'POST':
-        d = dict()
-        d['subject_id'] = request.form['subject_id']
-        pictures = database.get_relevant_pictures_for_user(d['subject_id'])
-
-        if not pictures:
-            return render_template('no_pictures_for_user.html',
-                                   id=d['subject_id'])
-
-        d['picture_name'] = pictures[0]
-        eval_data = database.get_evaluation_data_for_picture(d['picture_name'])
-
-        d['focused_people'] = eval_data[2]
-        d['unfocused_people'] = eval_data[3]
-
-        return render_template('instructions.html', d=d)
-
+# if evaluations left == picture.focal_subjects -> instructions -> survey
+# if evaluations left > 0 && picture.focal_subjects > -> survey
+# if evals left == 0 and picture.fs == 0 -> nf instructions -> nf survey
 
 @app.route('/survey/', methods=['POST', 'GET'])
 def survey():
-    if request.method == 'POST':
-        d = dict()
-        f = request.form
-
-        # terrible code duplication, sadly my own fault t.t
-        d['user_id'] = f['subject_id']
-        d['picture_name'] = f['picture_name']
-        d['focused_people'] = f['focused_people']
-        d['unfocused_people'] = f['unfocused_people']
-
-        return render_template('survey.html', data=d)
-
     if request.method == 'GET':
         return redirect(url_for('index'))
+
+    f = request.form
+    d = dict()
+    d['subject_id'] = f['subject_id']
+
+    # telltale if the dispatch is from the instructions or from a survey page.
+    if 'q2' in f:
+        database.save_focal_survey_result(f)
+
+    pictures = database.get_relevant_pictures_for_user(f['subject_id'])
+    if not pictures:
+        return render_template('no_pictures_for_user.html',
+                               id=d['subject_id'])
+
+    d['picture_name'] = pictures[0]
+
+    d['focused_people'], d['unfocused_people'] = \
+        database.get_evaluation_data_for_picture(d['picture_name'])
+
+    evals_left = database.get_evaluations_left(d['picture_name'])
+
+    if evals_left == 0 and 'nfDone' in f:
+        database.save_nf_survey_result(f)
+
+        # Replace this with success splashpage.
+        return redirect(url_for('index'))
+
+    if evals_left == 0 and 'nfSurvey' in f:
+        return render_template('nonfocal_survey.html', d=d)
+
+    if evals_left == 0 and d['unfocused_people'] > 0:
+        return render_template('nonfocal_instructions.html', d=d)
+
+    if evals_left == d['focused_people'] and 'f_instructions' in f:
+        return render_template('survey.html', d=d)
+
+    if evals_left == d['focused_people'] and d['focused_people'] > 0:
+        return render_template('instructions.html', d=d)
+
+    return render_template('dump.html', d=d)
 
 
 @app.route('/evaluation/', methods=['GET', 'POST'])
@@ -75,6 +87,11 @@ def upload_csv():
     if request.method == 'POST':
         database.upload_csv(request.files, app.config['UPLOAD_FOLDER'])
         return redirect(url_for('index'))
+
+
+@app.route('/dump/', methods=['POST'])
+def dump():
+    return render_template('dump.html', d=request.form)
 
 
 if __name__ == '__main__':
