@@ -1,4 +1,6 @@
 from flask import *
+
+import csv_reading
 import database
 
 app = Flask(__name__)
@@ -39,11 +41,12 @@ def survey():
                                id=d['subject_id'])
 
     d['picture_name'] = pictures[0]
+    picture_file = csv_reading.extract_name_from_url(d['picture_name'])
 
     d['focused_people'], d['unfocused_people'] = \
-        database.get_evaluation_data_for_picture(d['picture_name'])
+        database.get_evaluation_data_for_picture(picture_file)
 
-    evals_left = database.get_evaluations_left(d['picture_name'])
+    evals_left = database.get_evaluations_left(picture_file)
 
     if evals_left == 0 and 'nfDone' in f:
         database.save_nf_survey_result(f)

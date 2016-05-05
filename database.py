@@ -60,7 +60,7 @@ def get_next_picture():
     cur = c.cursor()
 
     cur.execute("""
-    SELECT name FROM pictures WHERE evaluated = 0 AND name != '' LIMIT 1;
+    SELECT link FROM pictures WHERE evaluated = 0 AND name != '' LIMIT 1;
     """)
 
     return cur.fetchall()[0][0]
