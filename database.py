@@ -60,13 +60,13 @@ def get_next_picture():
     cur = c.cursor()
 
     cur.execute("""
-    SELECT link FROM pictures
+    SELECT link, username FROM pictures
     WHERE evaluated = 0
     AND name != ''
     LIMIT 1;
     """)
 
-    return cur.fetchall()[0][0]
+    return cur.fetchall()[0]
 
 
 def insert_picture(c: sq.Connection,

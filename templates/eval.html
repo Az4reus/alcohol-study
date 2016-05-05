@@ -14,8 +14,13 @@
 </head>
 <body>
 <div class="fluid-container">
-    <div class="fluid-row col-md-8 col-md-offset-1">
-        <h2><a href="{{ url_for('index') }}">&lt; Index.</a></h2>
+    <div class="fluid-row">
+        <div class="col-md-4 col-md-offset-1">
+            <h2><a href="{{ url_for('index') }}">&lt; Index.</a></h2>
+        </div>
+        <div class=" col-md-4 text-right">
+            <h2><small>ID: {{ data['user_id'] }}</small></h2>
+        </div>
     </div>
 
     <div class="row">

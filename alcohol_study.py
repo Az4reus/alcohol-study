@@ -72,7 +72,7 @@ def survey():
 def initialise_pictures():
     if request.method == 'GET':
         d = dict()
-        d['picture_name'] = database.get_next_picture()
+        d['picture_name'], d['user_id'] = database.get_next_picture()
 
         return render_template('eval.html', data=d)
 
