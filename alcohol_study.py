@@ -41,11 +41,11 @@ def survey():
                                id=d['subject_id'])
 
     d['picture_name'] = picture
-
     d['focused_people'], d['unfocused_people'] = \
         database.get_evaluation_data_for_picture(picture)
 
     evals_left = database.get_evaluations_left(picture)
+    d['evals_left'] = evals_left
 
     if evals_left == 0 and 'nfSurvey' in f:
         return render_template('nonfocal_survey.html', d=d)
@@ -64,6 +64,9 @@ def survey():
 
     if evals_left == d['focused_people'] and d['focused_people'] > 0:
         return render_template('instructions.html', d=d)
+
+    if evals_left == 0 and d['unfocused_people'] == 0:
+        return redirect(url_for('index'))
 
     return render_template('dump.html', d=d)
 

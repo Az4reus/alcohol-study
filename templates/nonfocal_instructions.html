@@ -23,9 +23,11 @@
             <div class="lead">
                 This photo contains
                 <strong> {{ d['unfocused_people'] }} </strong>
-                individuals who are in the
+                individual{{ 's' if d['unfocused_people'] > 1 else '' }}
+                who {{ 'are' if d['unfocused_people'] > 1 else 'is' }} in the
                 background
-                and are not really looking in the direction of the camera.
+                and {{ 'are' if d['unfocused_people'] > 1 else 'is' }} not
+                really looking in the direction of the camera.
                 <div style="height: 20px;"></div>
                 Please indicate how many of these
                 individuals fall into the following categories.
