@@ -47,19 +47,19 @@ def survey():
 
     evals_left = database.get_evaluations_left(picture)
 
+    if evals_left == 0 and 'nfSurvey' in f:
+        return render_template('nonfocal_survey.html', d=d)
+
     if evals_left == 0 and 'nfDone' in f:
-        database.save_nf_survey_result(f)
+        database.save_nf_survey_result(f, d['unfocused_people'])
 
         # Replace this with success splashpage.
         return redirect(url_for('index'))
 
-    if evals_left == 0 and 'nfSurvey' in f:
-        return render_template('nonfocal_survey.html', d=d)
-
     if evals_left == 0 and d['unfocused_people'] > 0:
         return render_template('nonfocal_instructions.html', d=d)
 
-    if evals_left == d['focused_people'] and 'f_instructions' in f:
+    if evals_left != 0 and 'f_instructions' in f:
         return render_template('survey.html', d=d)
 
     if evals_left == d['focused_people'] and d['focused_people'] > 0:
