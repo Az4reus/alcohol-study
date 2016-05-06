@@ -306,3 +306,14 @@ def save_nf_survey_result(f, unfocused_people):
 def drop_database():
     os.remove('./alcohol-study.db')
     init_db()
+
+
+def has_nf_data(picture):
+    c = init_db()
+    cur = c.cursor()
+
+    isempty = cur.execute('''
+    SELECT * FROM picture_non_focal_result_data WHERE picture_name = ?
+    ''', [picture]).fetchall()
+
+    return isempty != []

@@ -54,7 +54,9 @@ def survey():
         database.save_nf_survey_result(f, d['unfocused_people'])
         return redirect(url_for('survey_recurse', id=d['subject_id']))
 
-    if evals_left == 0 and d['unfocused_people'] > 0:
+    if evals_left == 0 \
+            and d['unfocused_people'] > 0 \
+            and not database.has_nf_data(d['picture_name']):
         return render_template('nonfocal_instructions.html', d=d)
 
     if evals_left != 0 and 'f_instructions' in f:
@@ -66,7 +68,7 @@ def survey():
     if evals_left == 0 and d['unfocused_people'] == 0:
         return redirect(url_for('index'))
 
-    return render_template('dump.html', d=d)
+    return redirect(url_for('index'))
 
 
 @app.route('/survey_recurse/<id>/', methods=['GET'])
