@@ -1,5 +1,6 @@
 import os
 import sqlite3 as sq
+import json
 
 import time
 
@@ -46,9 +47,7 @@ def init_db() -> sq.Connection:
 
     CREATE TABLE IF NOT EXISTS picture_non_focal_result_data (
       picture_name TEXT NOT NULL,
-      answer_1 BLOB,
-      answer_2 BLOB,
-      answer_3 BLOB
+      answers BLOB
     );
     """)
     c.commit()
@@ -272,5 +271,19 @@ def save_focal_survey_result(f):
     conn.commit()
 
 
-def save_nf_survey_result(f):
-    pass
+def save_nf_survey_result(f, unfocused_people):
+    conn = init_db()
+    cur = conn.cursor()
+
+    dict = f.to_dict()
+    dict['unfocusedPeople'] = unfocused_people
+    picture = dict['picture_name']
+
+    j = json.dumps(dict)
+
+    cur.execute('''
+    insert into picture_non_focal_result_data VALUES (?, ?)
+    ''', [picture, j])
+
+    conn.commit()
+
