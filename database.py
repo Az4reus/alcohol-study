@@ -287,3 +287,8 @@ def save_nf_survey_result(f, unfocused_people):
 
     conn.commit()
 
+
+def drop_database():
+    os.remove('./alcohol-study.db')
+    init_db()
+

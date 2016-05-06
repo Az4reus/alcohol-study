@@ -96,5 +96,10 @@ def dump():
     return render_template('dump.html', d=request.form)
 
 
+@app.route('/drop/db/', methods=['GET'])
+def drop_database():
+    database.drop_database()
+    return redirect(url_for('index'))
+
 if __name__ == '__main__':
     app.run(debug=True, port=80, host='0.0.0.0')
