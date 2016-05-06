@@ -29,14 +29,14 @@
                 / {{ d['focused_people'] }}
             </span>
             <br>
-            counted from the left.
+            counted from the left. <hr>
 
             <form class="form-horizontal" action="{{ url_for('survey') }}"
                   method="post">
                 <div class="form-group">
-                    <h3>
+                    <h4>
                         1. Who is this person?
-                    </h3>
+                    </h4>
 
                     <label class="radio">
                         <input type="radio" name="q1" id="q1_spouse"
@@ -84,9 +84,9 @@
                 </div>
 
                 <div class="form-group">
-                    <h3>
+                    <h4>
                         2. How long have you known this person? <br>
-                    </h3>
+                    </h4>
                     <label>
                         Time in years: <br>
                         <input type="text" placeholder="0.5" name="q2"
@@ -95,10 +95,10 @@
                 </div>
 
                 <div class="form-group">
-                    <h3>
+                    <h4>
                         3. How long have you spent with this
                         person? <br>
-                    </h3>
+                    </h4>
                     <select name="q3" class="form-control">
                         <option></option>
                         <option>0-2 hours. (You guys had just met)</option>
@@ -124,8 +124,8 @@
                 </div>
 
                 <div class="form-group">
-                    <h3>4. It helps to turn to this person in times of need.
-                    </h3>
+                    <h4>4. It helps to turn to this person in times of need.
+                    </h4>
 
                     <select name="q4" class="form-control">
                         <option value="nil"></option>
@@ -139,9 +139,9 @@
                     <hr>
                 </div>
                 <div class="form-group">
-                    <h3>5. I usually discuss my problems and concerns with this
+                    <h4>5. I usually discuss my problems and concerns with this
                         person.
-                    </h3>
+                    </h4>
                     <select name="q5" class="form-control">
                         <option value="nil"></option>
                         <option value="1">1 - Disagree Strongly</option>
@@ -154,8 +154,8 @@
                     <hr>
                 </div>
                 <div class="form-group">
-                    <h3>6. I talk things over with this person.
-                    </h3>
+                    <h4>6. I talk things over with this person.
+                    </h4>
                     <select name="q6" class="form-control">
                         <option value="nil"></option>
                         <option value="1">1 - Disagree Strongly</option>
@@ -168,8 +168,8 @@
                     <hr>
                 </div>
                 <div class="form-group">
-                    <h3>7. I find it easy to depend on this person.
-                    </h3>
+                    <h4>7. I find it easy to depend on this person.
+                    </h4>
                     <select name="q7" class="form-control">
                         <option value="nil"></option>
                         <option value="1">1 - Disagree Strongly</option>
@@ -181,8 +181,8 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <h3>8. I don't feel comfortable opening up to this person.
-                    </h3>
+                    <h4>8. I don't feel comfortable opening up to this person.
+                    </h4>
                     <select name="q8" class="form-control">
                         <option value="nil"></option>
                         <option value="1">1 - Disagree Strongly</option>
@@ -194,9 +194,9 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <h3>9. I prefer not to show this person how I feel deep
+                    <h4>9. I prefer not to show this person how I feel deep
                         down.
-                    </h3>
+                    </h4>
                     <select name="q9" class="form-control">
                         <option value="nil"></option>
                         <option value="1">1 - Disagree Strongly</option>
@@ -208,9 +208,9 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <h3>10. I often worry that this person doesn't really care
+                    <h4>10. I often worry that this person doesn't really care
                         for me.
-                    </h3>
+                    </h4>
                     <select name="q10" class="form-control">
                         <option value="nil"></option>
                         <option value="1">1 - Disagree Strongly</option>
@@ -222,8 +222,8 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <h3>11. I'm afraid this person may abandon me.
-                    </h3>
+                    <h4>11. I'm afraid this person may abandon me.
+                    </h4>
                     <select name="q11" class="form-control">
                         <option value="nil"></option>
                         <option value="1">1 - Disagree Strongly</option>
@@ -235,9 +235,9 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <h3>12. I worry that this person won't care about me as much
+                    <h4>12. I worry that this person won't care about me as much
                         as I care about them.
-                    </h3>
+                    </h4>
                     <select name="q12" class="form-control">
                         <option value="nil"></option>
                         <option value="1">1 - Disagree Strongly</option>
