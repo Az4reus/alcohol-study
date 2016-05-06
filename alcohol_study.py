@@ -69,7 +69,7 @@ def survey():
     return render_template('dump.html', d=d)
 
 
-@app.route('/survey_recurse/<id>/', methods=['POST'])
+@app.route('/survey_recurse/<id>/', methods=['GET'])
 def survey_recurse(id):
     next_picture = database.get_relevant_pictures_for_user(id)
 
