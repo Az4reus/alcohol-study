@@ -113,17 +113,35 @@
                                 0’s where appropriate. Note that all of these
                                 numbers
                                 should together add up
-                                to {{ d['unfocused_people'] }}.
+                                to <strong>{{ d['unfocused_people'] }}</strong>.
                             </small>
                         </h3>
                     </div>
                     <div class="form-group">
                         <label>
                             <input type="text"
-                                   name="q2_less1y"
-                                   id="q1_less1y"
+                                   name="q2_less1mo"
+                                   id="q2_less1mp"
                                    value="0" size="1">
-                            &lt;1 year.
+                            &lt;1 month.
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="text"
+                                   name="q2_less6mp"
+                                   id="q2_less6mo"
+                                   value="0" size="1">
+                            1-6 months.
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="text"
+                                   name="q2_less1y"
+                                   id="q2_less1y"
+                                   value="0" size="1">
+                            6 months - 1 year.
                         </label>
                     </div>
                     <div class="form-group">
@@ -158,7 +176,8 @@
                 <div class="form-group">
                     <div class="form-group">
                         <h3>
-                            In total, how many hours would you say you had spent
+                            3. In total, how many hours would you say you had
+                            spent
                             in each of these people’s company (interacting with
                             them and/or engaging closely in a shared activities)
                             prior to when you took this photo? <br>
@@ -167,7 +186,8 @@
                                 people who fall into that category, putting 0’s
                                 where appropriate. Note that all of these
                                 numbers
-                                should together add up to [Y].
+                                should together add up
+                                to <strong>{{ d['unfocused_people'] }}</strong>.
                             </small>
                         </h3>
                     </div>
@@ -268,6 +288,8 @@
                     <input type="hidden" value="nfDone" name="nfDone">
                     <input type="hidden" value="{{ d['subject_id'] }}"
                            name="subject_id">
+                    <input type="hidden" value="{{ d['picture_name'] }}"
+                           name="picture_name">
                     <input type="submit" value="Submit"
                            class="btn btn-primary">
                 </div>
