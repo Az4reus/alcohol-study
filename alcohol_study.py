@@ -52,9 +52,7 @@ def survey():
 
     if evals_left == 0 and 'nfDone' in f:
         database.save_nf_survey_result(f, d['unfocused_people'])
-
-        # Replace this with success splashpage.
-        return redirect(url_for('index'))
+        return redirect(url_for('survey_recurse', id=d['subject_id']))
 
     if evals_left == 0 and d['unfocused_people'] > 0:
         return render_template('nonfocal_instructions.html', d=d)
@@ -69,6 +67,16 @@ def survey():
         return redirect(url_for('index'))
 
     return render_template('dump.html', d=d)
+
+
+@app.route('/survey_recurse/<id>/', methods=['POST'])
+def survey_recurse(id):
+    next_picture = database.get_relevant_pictures_for_user(id)
+
+    if not next_picture:
+        return redirect(url_for('index'))
+
+    return render_template('recurse.html', id=id)
 
 
 @app.route('/evaluation/<id>/', methods=['GET', 'POST'])
@@ -127,6 +135,7 @@ def dump():
 def drop_database():
     database.drop_database()
     return redirect(url_for('upload_csv'))
+
 
 if __name__ == '__main__':
     # app.run(debug=True, port=80, host='0.0.0.0')
