@@ -34,9 +34,9 @@ def survey():
     # telltale if the dispatch is from the instructions or from a survey page.
     if 'q2' in f:
         database.save_focal_survey_result(f)
-
-    picture = database.get_relevant_pictures_for_user(f['subject_id'])
-    if not picture:
+    try:
+        picture = database.get_relevant_pictures_for_user(f['subject_id'])
+    except IndexError:
         return render_template('no_pictures_for_user.html',
                                id=d['subject_id'])
 
