@@ -35,7 +35,7 @@
                     <label class="radio">
                         <input type="radio" name="q1" id="q1_family"
                                value="A family member"
-                               onclick="addTextbox('q1')">
+                               onclick="addTextbox('q1_family')">
                         A family member
                     </label>
                     <label class="radio">
@@ -67,7 +67,7 @@
                     </label>
                     <label class="radio">
                         <input type="radio" name="q1" id="q1_other"
-                               value="other" onclick="addTextbox('q1')">
+                               value="other" onclick="addTextbox('q1_other')">
                         Other
                     </label>
                 </div>
@@ -242,6 +242,8 @@
                            value="{{ d['subject_id'] }}">
                     <input type="hidden" name="picture_name"
                            value="{{ d['picture_name'] }}">
+                    <input type="hidden" name="f_instructions"
+                           value="f_instructions">
                     <input type="submit" value="Submit"
                            class="btn btn-primary">
                 </div>
