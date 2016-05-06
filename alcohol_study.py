@@ -71,11 +71,35 @@ def survey():
     return render_template('dump.html', d=d)
 
 
+@app.route('/evaluation/<id>/', methods=['GET', 'POST'])
+def eval_userid_pictures(id):
+    if request.method == 'GET':
+        d = dict()
+        d['user_id'] = id
+
+        try:
+            d['picture_name'] = database.get_next_user_id_picture(id)[0][0]
+        except IndexError:
+            return redirect(url_for('index'))
+
+        d['exclusive'] = True
+
+        return render_template('eval.html', data=d)
+
+    if request.method == 'POST':
+        database.insert_picture_data(request.form)
+
+        return redirect(url_for('eval_userid_pictures', id=id))
+
+
 @app.route('/evaluation/', methods=['GET', 'POST'])
 def initialise_pictures():
     if request.method == 'GET':
         d = dict()
-        d['picture_name'], d['user_id'] = database.get_next_picture()
+        try:
+            d['picture_name'], d['user_id'] = database.get_next_picture()
+        except IndexError:
+            return redirect(url_for('index'))
 
         return render_template('eval.html', data=d)
 
@@ -102,7 +126,8 @@ def dump():
 @app.route('/drop/db/', methods=['GET'])
 def drop_database():
     database.drop_database()
-    return redirect(url_for('index'))
+    return redirect(url_for('upload_csv'))
 
 if __name__ == '__main__':
-    app.run(debug=True, port=80, host='0.0.0.0')
+    # app.run(debug=True, port=80, host='0.0.0.0')
+    app.run(debug=True)

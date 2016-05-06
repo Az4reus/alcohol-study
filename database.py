@@ -68,6 +68,21 @@ def get_next_picture():
     return cur.fetchall()[0]
 
 
+def get_next_user_id_picture(id):
+    c = init_db()
+    cur = c.cursor()
+
+    cur.execute('''
+    SELECT link FROM pictures
+    WHERE evaluated = 0
+    AND name != ''
+    AND pictures.username = ?
+    LIMIT 1
+    ''', [id])
+
+    return cur.fetchall()
+
+
 def insert_picture(c: sq.Connection,
                    name: str,
                    link: str,
@@ -217,10 +232,10 @@ def get_evaluations_left(picture_name):
             [picture_name]).fetchall()[0][0]
 
     focal_subjects = cur.execute(
-        '''SELECT focused_people
-           FROM picture_evaluation_data
-           WHERE picture_name = ?''',
-        [picture_name]).fetchall()[0][0]
+            '''SELECT focused_people
+               FROM picture_evaluation_data
+               WHERE picture_name = ?''',
+            [picture_name]).fetchall()[0][0]
 
     try:
         focal_subjects = int(focal_subjects)
@@ -282,7 +297,7 @@ def save_nf_survey_result(f, unfocused_people):
     j = json.dumps(dict)
 
     cur.execute('''
-    insert into picture_non_focal_result_data VALUES (?, ?)
+    INSERT INTO picture_non_focal_result_data VALUES (?, ?)
     ''', [picture, j])
 
     conn.commit()
@@ -291,4 +306,3 @@ def save_nf_survey_result(f, unfocused_people):
 def drop_database():
     os.remove('./alcohol-study.db')
     init_db()
-

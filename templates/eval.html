@@ -19,7 +19,9 @@
             <h2><a href="{{ url_for('index') }}">&lt; Index.</a></h2>
         </div>
         <div class=" col-md-4 text-right">
-            <h2><small>ID: {{ data['user_id'] }}</small></h2>
+            <h2>
+                <small>ID: {{ data['user_id'] }}</small>
+            </h2>
         </div>
     </div>
 
@@ -29,55 +31,61 @@
                  class="img-responsive center-block img-thumbnail"/>
         </div>
 
-        <form action="{{ url_for('initialise_pictures') }}" method="post"
-              class="form-horizontal col-md-2" target="_self">
-            <div class="form-group">
-                <label>Does this image contain people? <br>
-                    <label class="radio-inline">
-                        <input type="radio" name="containsPeople"
-                               id="containsPeople"
-                               value="Yes" onclick="hiddenControl()">
-                        Yes
-                    </label>
-                    <label class="radio-inline">
-                        <input type="radio" name="containsPeople"
-                               value="No" checked>
-                        No
-                    </label>
+        {% if not 'exclusive' in data %}
+            <form action="{{ url_for('initialise_pictures') }}" method="post"
+                  class="form-horizontal col-md-2" target="_self">
+        {% else %}
+            <form action="{{ url_for('eval_userid_pictures', id=data['user_id']) }}"
+                  method="post"
+                  class="form-horizontal col-md-2" target="_self">
+        {% endif %}
+        <div class="form-group">
+            <label>Does this image contain people? <br>
+                <label class="radio-inline">
+                    <input type="radio" name="containsPeople"
+                           id="containsPeople"
+                           value="Yes" onclick="hiddenControl()">
+                    Yes
                 </label>
-            </div>
-            <div class="hidden" id="hiddenControl">
-                <div class="form-group">
-                    <label for="focusedPeopleAmount">
-                        How many focal individuals are in the picture?
-                        <input type="text" id="focusedPeopleAmount"
-                               name="focalSubjects"
-                               class="form-control">
-                    </label>
-                </div>
-
-                <div class="form-group">
-                    <label for="unfocusedPeopleAmount">
-                        How many non-focal individuals are in the picture?
-                        <input type="text" id="unfocusedPeopleAmount"
-                               name="nonFocalSubjects"
-                               class="form-control">
-                    </label>
-                </div>
-            </div>
-
-            <input type="hidden" value="{{ data['picture_name'] }}"
-                   name="picture_name">
+                <label class="radio-inline">
+                    <input type="radio" name="containsPeople"
+                           value="No" checked>
+                    No
+                </label>
+            </label>
+        </div>
+        <div class="hidden" id="hiddenControl">
             <div class="form-group">
-                <label>
-                    <input type="checkbox" name="isObsolete">
-                    Obsolete picture?
+                <label for="focusedPeopleAmount">
+                    How many focal individuals are in the picture?
+                    <input type="text" id="focusedPeopleAmount"
+                           name="focalSubjects"
+                           class="form-control">
                 </label>
             </div>
 
             <div class="form-group">
-                <input type="submit" value="Submit" class="btn btn-primary">
+                <label for="unfocusedPeopleAmount">
+                    How many non-focal individuals are in the picture?
+                    <input type="text" id="unfocusedPeopleAmount"
+                           name="nonFocalSubjects"
+                           class="form-control">
+                </label>
             </div>
+        </div>
+
+        <input type="hidden" value="{{ data['picture_name'] }}"
+               name="picture_name">
+        <div class="form-group">
+            <label>
+                <input type="checkbox" name="isObsolete">
+                Obsolete picture?
+            </label>
+        </div>
+
+        <div class="form-group">
+            <input type="submit" value="Submit" class="btn btn-primary">
+        </div>
         </form>
     </div>
 </div>
