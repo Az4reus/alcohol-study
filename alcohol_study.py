@@ -29,23 +29,27 @@ def survey():
 
     f = request.form
     d = dict()
-    d['subject_id'] = f['subject_id']
+    user_id = f['subject_id']
 
     # telltale if the dispatch is from the instructions or from a survey page.
     if 'q2' in f:
         database.save_focal_survey_result(f)
+
     try:
-        picture = database.get_relevant_pictures_for_user(f['subject_id'])
+        picture = database.get_next_relevant_picture_for_user(user_id)
     except IndexError:
         return render_template('no_pictures_for_user.html',
-                               id=d['subject_id'])
+                               id=user_id)
 
-    d['picture_name'] = picture
-    d['focused_people'], d['unfocused_people'] = \
-        database.get_evaluation_data_for_picture(picture)
+    fp, ufp = database.get_evaluation_data_for_picture(picture)
 
     evals_left = database.get_evaluations_left(picture)
+
     d['evals_left'] = evals_left
+    d['focused_people'] = fp
+    d['unfocused_people'] = ufp
+    d['subject_id'] = user_id
+    d['picture_name'] = picture
 
     if evals_left == 0 and 'nfSurvey' in f:
         return render_template('nonfocal_survey.html', d=d)
@@ -73,7 +77,7 @@ def survey():
 
 @app.route('/survey_recurse/<id>/', methods=['GET'])
 def survey_recurse(id):
-    next_picture = database.get_relevant_pictures_for_user(id)
+    next_picture = database.get_next_relevant_picture_for_user(id)
 
     if not next_picture:
         return redirect(url_for('index'))

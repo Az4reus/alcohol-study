@@ -17,7 +17,7 @@ def init_db() -> sq.Connection:
       link BLOB,
       evaluated BOOLEAN,
       username TEXT,
-      obsolete BOOLEAN
+      finished BOOLEAN
     );
 
     CREATE TABLE IF NOT EXISTS picture_evaluation_data (
@@ -121,7 +121,6 @@ def insert_picture_data(form):
     picture_name = form['picture_name']
     focused_people = form['focalSubjects']
     nonfocused_people = form['nonFocalSubjects']
-    obsolete = 'isObsolete' in form
 
     c = init_db()
     cur = c.cursor()
@@ -137,13 +136,6 @@ def insert_picture_data(form):
     """, [picture_name])
 
     c.commit()
-
-    if obsolete:
-        cur.execute("UPDATE pictures SET obsolete = 1 WHERE name = ?",
-                    [picture_name])
-        c.commit()
-
-    c.close()
 
 
 def get_user_ids():
@@ -164,14 +156,14 @@ def get_waiting_user_ids():
       ON pictures.link = picture_evaluation_data.picture_name
     WHERE
     pictures.evaluated = 1
-    AND pictures.obsolete = 0
     AND picture_evaluation_data.shows_people = 1
+    AND pictures.finished = 0
     """).fetchall()
 
     return [t[0] for t in raw_data]
 
 
-def get_relevant_pictures_for_user(user_id):
+def get_next_relevant_picture_for_user(user_id):
     conn = init_db()
     cur = conn.cursor()
 
@@ -180,7 +172,6 @@ def get_relevant_pictures_for_user(user_id):
             FROM pictures INNER JOIN picture_evaluation_data
               ON pictures.link = picture_evaluation_data.picture_name
             WHERE pictures.username=?
-            AND pictures.evaluated = 1
             AND picture_evaluation_data.shows_people = 1
             LIMIT 1""",
             [user_id]).fetchall()
@@ -258,8 +249,11 @@ def save_focal_survey_result(f):
 
     q1 = f['q1']
     q1_text = ''
-    if q1 == 'A family member' or q1 == 'other':
-        q1_text = f['q1_textbox']
+    if q1 == 'A family member':
+        q1_text = f['q1_family_textbox']
+
+    if q1 == 'other':
+        q1_text = f['q1_other_textbox']
 
     q2 = f['q2']
     if q2 == '':
@@ -291,6 +285,9 @@ def save_nf_survey_result(f, unfocused_people):
     cur = conn.cursor()
 
     dict = f.to_dict()
+    if not 'unfocusedPeople' in f:
+        return
+
     dict['unfocusedPeople'] = unfocused_people
     picture = dict['picture_name']
 
@@ -301,6 +298,10 @@ def save_nf_survey_result(f, unfocused_people):
     ''', [picture, j])
 
     conn.commit()
+
+    cur.execute('''
+    UPDATE pictures SET finished = 1 WHERE link=?
+    ''', [picture])
 
 
 def drop_database():
