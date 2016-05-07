@@ -18,10 +18,6 @@ def index():
     return render_template('index.html', data=d)
 
 
-# if evaluations left == picture.focal_subjects -> instructions -> survey
-# if evaluations left > 0 && picture.focal_subjects > -> survey
-# if evals left == 0 and picture.fs == 0 -> nf instructions -> nf survey
-
 @app.route('/survey/', methods=['POST', 'GET'])
 def survey():
     if request.method == 'GET':
@@ -51,28 +47,72 @@ def survey():
     d['subject_id'] = user_id
     d['picture_name'] = picture
 
-    if evals_left == 0 and 'nfSurvey' in f:
-        return render_template('nonfocal_survey.html', d=d)
-
-    if evals_left == 0 and 'nfDone' in f:
-        database.save_nf_survey_result(f, d['unfocused_people'])
-        return redirect(url_for('survey_recurse', id=d['subject_id']))
-
-    if evals_left == 0 \
-            and d['unfocused_people'] > 0 \
-            and not database.has_nf_data(d['picture_name']):
-        return render_template('nonfocal_instructions.html', d=d)
-
-    if evals_left != 0 and 'f_instructions' in f:
-        return render_template('survey.html', d=d)
-
-    if evals_left == d['focused_people'] and d['focused_people'] > 0:
+    if needs_survey_instructions(fp, evals_left):
         return render_template('instructions.html', d=d)
 
-    if evals_left == 0 and d['unfocused_people'] == 0:
-        return redirect(url_for('index'))
+    if needs_survey(fp, evals_left):
+        return render_template('survey.html', d=d)
 
-    return redirect(url_for('index'))
+    if needs_nf_survey(ufp):
+        return render_template('nonfocal_instructions.html', d=d)
+
+    if needs_another_survey(user_id):
+        return redirect(url_for('survey_recurse', id=user_id))
+
+
+def needs_survey_instructions(focused_people, iterations_left):
+    """Looks whether or not any given picture needs to have survey instructions
+    displayed.
+
+    Criteria:
+    - No evaluations have been done
+    - there are focal subjects to survey the participant about."""
+
+    return (focused_people > 0) and (focused_people == iterations_left)
+
+
+def needs_survey(focused_people, iterations_left):
+    """
+     Criteria for another survey being needed:
+      - More focused people than done evaluations
+      - There are focused people at all.
+
+    :return: Whether or not the given criteria warrant another survey iteration.
+    """
+
+    return focused_people > iterations_left > 0
+
+
+def needs_nf_survey(unfocused_people):
+    """
+    Criteria for the NF survey being needed:
+    - There are unfocused people
+    :return:
+    """
+
+    return unfocused_people > 0
+
+
+def needs_another_survey(user_id):
+    """
+    Returns whether or not the survey should recurse, IE, whether or not the
+    participant has any pictures left that have been:
+    - evaluated
+    - not yet surveyed about
+    - showing people.
+
+    :param user_id: The user in question.
+    :return: Whether or not another survey is needed.
+    """
+
+    next = database.get_next_relevant_picture_for_user(user_id)
+
+    # the query above does not tell me whether or not the survey is already done
+    # for that picture. Find out.
+
+    # I should add a 'finished' column in `pictures` and update that in the
+    # NF data capture.
+
 
 
 @app.route('/survey_recurse/<id>/', methods=['GET'])
