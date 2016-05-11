@@ -23,7 +23,7 @@
 
             Current focal individual: <br>
             <span style="font-size: 40px;">
-                {{ d['focused_people'] - d['evals_left'] + 1 }}
+                {{ d['iteration'] }}
             </span>
             <span style="font-size: 20px">
                 / {{ d['focused_people'] }},
@@ -32,7 +32,8 @@
             counted from the left.
             <hr>
 
-            <form class="form-horizontal" action="{{ url_for('survey') }}"
+            <form class="form-horizontal"
+                  action="{{ url_for('survey_page', picture_id=d['id'], iteration=d['iteration']) }}"
                   method="post">
                 <div class="form-group">
                     <h4>
@@ -261,8 +262,6 @@
                            value="{{ d['subject_id'] }}">
                     <input type="hidden" name="picture_name"
                            value="{{ d['picture_name'] }}">
-                    <input type="hidden" name="f_instructions"
-                           value="f_instructions">
                     <input type="submit" value="Submit"
                            class="btn btn-primary">
                 </div>
