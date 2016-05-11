@@ -36,15 +36,10 @@
         <div class="row">
             <div class="col-md-offset-6 col-md-4">
                 <div style="height: 25px;"></div>
-                <form name="instructions" action="{{ url_for('survey') }}"
+                <form name="instructions"
+                      action="{{ url_for('survey_page', picture_id=d['picture_id'], iteration=0) }}"
                       method="post"
                       class="form-horizontal">
-                    <input name="subject_id" type="hidden"
-                           value="{{ d['subject_id'] }}">
-                    <input name="focused_people" type="hidden"
-                           value="{{ d['focused_people'] }}">
-                    <input name="f_instructions" value="f_instructions"
-                           type="hidden">
 
                     <input type="submit" value="Okay!" class="btn btn-primary">
                 </form>
