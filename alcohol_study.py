@@ -67,6 +67,26 @@ def survey():
     return redirect(url_for('index'))
 
 
+@app.route('/survey/dispatch/', methods=['POST'])
+def survey_dispatch():
+    user_id = request.form['subject_id']
+    try:
+        picture_id = database.get_next_relevant_picture_for_user(user_id)
+    except IndexError:
+        print(
+                "### ERROR ### - "
+                "No relevant pictures for user_id {}, "
+                "must be a bug in the selector@index".format(user_id))
+        return redirect(url_for('index'))
+
+    focused_people = database.get_picture_eval_data_by_id(picture_id)[3]
+
+    if focused_people > 0:
+        return redirect(url_for('survey_instructions', picture_id=picture_id))
+    else:
+        return redirect(url_for('nf_dispatch', picture_id=picture_id))
+
+
 @app.route('/instructions/<picture_id>/')
 def survey_instructions(picture_id):
     d = dict()
