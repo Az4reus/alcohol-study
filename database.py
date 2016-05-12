@@ -363,13 +363,13 @@ def save_nf_survey_result(f, unfocused_people):
     set_done(picture)
 
 
-def set_done(picture):
+def set_done(picture_id):
     conn = init_db()
     cur = conn.cursor()
 
     cur.execute('''
-    UPDATE pictures SET finished = 1 WHERE link=?
-    ''', [picture])
+    UPDATE pictures SET finished = 1 WHERE ROWID=?
+    ''', [picture_id])
     conn.commit()
 
 

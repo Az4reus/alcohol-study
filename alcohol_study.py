@@ -151,6 +151,9 @@ def survey_page(picture_id, iteration):
 def nf_dispatch(picture_id):
     unfocused = database.get_picture_eval_data_by_id(picture_id)[4]
 
+    if unfocused == '':
+        unfocused = 0
+
     if unfocused > 0:
         return redirect(url_for('nf_instructions', picture_id=picture_id))
     else:
@@ -170,13 +173,31 @@ def nf_instructions(picture_id):
 
 @app.route('/nf/survey/<picture_id>/', methods=['GET'])
 def nf_survey_page(picture_id):
-    
-    return render_template('nonfocal_survey.html', d=d)
+    if request.method == 'GET':
+        d = dict()
+        d['id'] = picture_id
+
+        picture_data = database.get_picture_by_id(picture_id)
+        d['user_id'] = picture_data[3]
+        d['picture_name'] = picture_data[1]
+        d['unfocused_people'] = database.get_picture_eval_data_by_id(picture_id)[4]
+
+        return render_template('nonfocal_survey.html', d=d)
 
 
-@app.route('/finished/<picture_id>/', methods=['GET'])
+@app.route('/finished/<picture_id>/', methods=['GET', 'POST'])
 def finished(picture_id):
-    pass
+    if request.method == 'POST':
+        ufp = database.get_picture_eval_data_by_id(picture_id)[4]
+        database.save_nf_survey_result(request.form, ufp)
+
+
+        return redirect(url_for('index'))
+
+    if request.method == 'GET':
+        database.set_done(picture_id)
+
+        return redirect(url_for('index'))
 
 
 def needs_survey_instructions(focused_people, iterations_left, form):

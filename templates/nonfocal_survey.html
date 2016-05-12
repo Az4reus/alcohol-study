@@ -20,7 +20,7 @@
                  class="img-responsive center-block img-thumbnail">
         </div>
         <div class="col-md-4 col-md-offset-1">
-            <form class="form-horizontal" action="{{ url_for('survey') }}"
+            <form class="form-horizontal" action="{{ url_for('finished', picture_id=d['id']) }}"
                   method="post">
                 <div class="form-group">
                     <div class="form-group">
@@ -298,7 +298,6 @@
 
                 </div>
                 <div class="form-group">
-                    <input type="hidden" value="nfDone" name="nfDone">
                     <input type="hidden" value="{{ d['subject_id'] }}"
                            name="subject_id">
                     <input type="hidden" value="{{ d['picture_name'] }}"
