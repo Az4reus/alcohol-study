@@ -237,10 +237,6 @@ def upload_csv(files, app_config):
     csv_reading.read_data_csv(os.path.join(app_config, filename))
 
 
-def _allowed_file_name(file_name):
-    return file_name.rsplit('.', 1)[1] == 'csv'
-
-
 def get_evaluations_left(picture_name):
     conn = init_db()
     cur = conn.cursor()
@@ -351,7 +347,7 @@ def save_nf_survey_result(f, unfocused_people):
 
     d = f.to_dict()
     d['unfocusedPeople'] = unfocused_people
-    picture = d['picture_name']
+    picture = d['id']
 
     j = json.dumps(d)
 
@@ -361,6 +357,15 @@ def save_nf_survey_result(f, unfocused_people):
     conn.commit()
 
     set_done(picture)
+
+
+def get_user_for_picture_id(picture_id):
+    conn = init_db()
+    cur = conn.cursor()
+
+    return cur.execute('''
+    select username from pictures where ROWID = ?
+    ''', [picture_id]).fetchall()[0][0]
 
 
 def set_done(picture_id):
