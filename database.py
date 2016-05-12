@@ -267,7 +267,9 @@ def get_evaluations_left(picture_name):
 
 def get_picture_by_id(id):
     """Fetches any given picture by its rowID, effectively enumerating
-    all pictures."""
+    all pictures.
+    Returns a tuple representing the result row. \n
+    Format: (file_name, link, evaluated, user_id, finished)"""
     conn = init_db()
     cur = conn.cursor()
 

@@ -159,12 +159,19 @@ def nf_dispatch(picture_id):
 
 @app.route('/nf/instructions/<picture_id>/', methods=['GET'])
 def nf_instructions(picture_id):
-    pass
+    d = dict()
+
+    d['picture_name'] = database.get_picture_by_id(picture_id)[1]
+    d['unfocused_people'] = database.get_picture_eval_data_by_id(picture_id)[4]
+    d['id'] = picture_id
+
+    return render_template('nonfocal_instructions.html', d=d)
 
 
 @app.route('/nf/survey/<picture_id>/', methods=['GET'])
 def nf_survey_page(picture_id):
-    pass
+    
+    return render_template('nonfocal_survey.html', d=d)
 
 
 @app.route('/finished/<picture_id>/', methods=['GET'])
