@@ -191,13 +191,20 @@ def finished(picture_id):
         ufp = database.get_picture_eval_data_by_id(picture_id)[4]
         database.save_nf_survey_result(request.form, ufp)
 
-
-        return redirect(url_for('index'))
+        user_id = database.get_user_for_picture_id(picture_id)
+        if needs_another_survey(user_id):
+            return redirect(url_for('survey_recurse', id=user_id))
+        else:
+            return redirect(url_for('index'))
 
     if request.method == 'GET':
         database.set_done(picture_id)
 
-        return redirect(url_for('index'))
+        user_id = database.get_user_for_picture_id(picture_id)
+        if needs_another_survey(user_id):
+            return redirect(url_for('survey_recurse', id=user_id))
+        else:
+            return redirect(url_for('index'))
 
 
 def needs_survey_instructions(focused_people, iterations_left, form):
@@ -269,11 +276,6 @@ def needs_another_survey(user_id):
 
 @app.route('/survey_recurse/<id>/', methods=['GET'])
 def survey_recurse(id):
-    next_picture = database.get_next_relevant_picture_for_user(id)
-
-    if not next_picture:
-        return redirect(url_for('index'))
-
     return render_template('recurse.html', id=id)
 
 
