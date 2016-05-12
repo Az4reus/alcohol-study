@@ -32,21 +32,10 @@
         <div class="row">
             <div class="col-md-offset-6 col-md-4">
                 <div style="height: 25px;"></div>
-                <form name="instructions" action="{{ url_for('survey') }}"
-                      method="post"
-                      class="form-horizontal">
-                    <input name="subject_id" type="hidden"
-                           value="{{ d['subject_id'] }}">
-                    <input name="focused_people" type="hidden"
-                           value="{{ d['focused_people'] }}">
-                    <input name="unfocused_people" type="hidden"
-                           value="{{ d['unfocused_people'] }}">
-                    <input name="picture_name" type="hidden"
-                           value="{{ d['picture_name'] }}">
-                    <input name="nfSurvey" value="nfSurvey" type="hidden">
 
-                    <input type="submit" value="Okay!" class="btn btn-primary">
-                </form>
+                <a href="{{ url_for('nf_survey_page', picture_id=d['id']) }}" class="btn btn-primary">
+                    Okay!
+                </a>
             </div>
         </div>
     </div>
