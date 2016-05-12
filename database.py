@@ -39,7 +39,7 @@ def set_up_tables(conn):
     );
 
     CREATE TABLE IF NOT EXISTS picture_focal_result_data (
-      picture_name TEXT NOT NULL,
+      id INTEGER,
       person_from_left INTEGER NOT NULL,
       answer_1 INTEGER,
       answer_1_text TEXT,
@@ -55,6 +55,9 @@ def set_up_tables(conn):
       answer_11 INT,
       answer_12 INT
     );
+
+    CREATE UNIQUE INDEX focal_index
+    ON picture_focal_result_data(id, person_from_left);
 
     CREATE TABLE IF NOT EXISTS picture_non_focal_result_data (
       picture_name TEXT NOT NULL,
@@ -177,11 +180,23 @@ def get_waiting_user_ids():
 
 
 def get_next_relevant_picture_for_user(user_id):
+    """
+    Selects the userID of the next RELEVANT picture for any given userID.
+    Relevancy criteria:
+    - Username is the same
+    - The picture actually shows people.
+    - It is not yet set to 'finished'.
+
+    :param user_id: The userID to query for, usually from the index.html selector.
+    :return: The picture_id of the next relevant picture. Throws an IndexError
+     if there are none.
+    """
+
     conn = init_db()
     cur = conn.cursor()
 
     raw_data = cur.execute(
-            """SELECT pictures.link
+            """SELECT pictures.ROWID
             FROM pictures INNER JOIN picture_evaluation_data
               ON pictures.link = picture_evaluation_data.picture_name
             WHERE pictures.username=?
@@ -261,6 +276,20 @@ def get_picture_by_id(id):
     ''', [id]).fetchall()[0]
 
 
+def get_picture_eval_data_by_id(id):
+    """
+    Fetches the evaluation data for the given picture ID.
+    Returns a tuple containing the row. Format:
+    (id, link, shows_people, focused, unfocused)
+    """
+    conn = init_db()
+    cur = conn.cursor()
+
+    return cur.execute('''
+    select * from picture_evaluation_data where id = ?
+    ''', [id]).fetchall()[0]
+
+
 def get_row_by_link(picture_link):
     """Fetches the given row ID in the pictures table by link.
     :param picture_link: Metricwire link to said picture.
@@ -274,16 +303,12 @@ def get_row_by_link(picture_link):
     ''', [picture_link]).fetchall()[0][0]
 
 
-def save_focal_survey_result(f):
+def save_focal_survey_result(f, iteration):
     conn = init_db()
     cur = conn.cursor()
 
-    picture_name = f['picture_name']
-    person_from_left = cur.execute(
-            """SELECT count(*)
-               FROM picture_focal_result_data
-               WHERE picture_name = ?""",
-            [picture_name]).fetchall()[0][0] + 1
+    picture_id = f['id']
+    person_from_left = iteration
 
     q1 = f['q1']
     q1_text = ''
@@ -309,10 +334,10 @@ def save_focal_survey_result(f):
     q12 = f['q12']
 
     cur.execute("""
-    INSERT INTO picture_focal_result_data VALUES (?, ?, ?, ?, ?,
+    INSERT OR REPLACE INTO picture_focal_result_data VALUES (?, ?, ?, ?, ?,
      ?, ?, ?, ?, ?,
      ?, ?, ?, ?, ?)
-  """, [picture_name, person_from_left, q1, q1_text, q2, q3, q4, q5, q6, q7, q8,
+  """, [picture_id, person_from_left, q1, q1_text, q2, q3, q4, q5, q6, q7, q8,
         q9, q10, q11, q12])
 
     conn.commit()

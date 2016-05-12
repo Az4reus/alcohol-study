@@ -90,13 +90,11 @@ def survey_dispatch():
 @app.route('/instructions/<picture_id>/')
 def survey_instructions(picture_id):
     d = dict()
-    d['picture_id'] = picture_id()
+    d['picture_id'] = picture_id
 
     picture_data = database.get_picture_by_id(picture_id)
     d['picture_name'] = picture_data[1]
-
-    fp, _ = database.get_evaluation_data_for_picture(picture_data[3])
-    d['focused_people'] = fp
+    d['focused_people'] = database.get_picture_eval_data_by_id(picture_id)[3]
 
     return render_template('instructions.html', d=d)
 
@@ -117,10 +115,18 @@ def survey_page(picture_id, iteration):
     :return: Renders a survey page for the specified parameters.
     """
     if request.method == 'POST':
-        database.save_focal_survey_result(request.form)
+        database.save_focal_survey_result(request.form, iteration)
+
+        try:
+            i = int(iteration)
+            i += 1
+            i = str(i)
+        except ValueError:
+            i = 1
+
         return redirect(url_for('survey_page',
                                 picture_id=picture_id,
-                                iteration=(iteration + 1)))
+                                iteration=i))
 
     if request.method == 'GET':
         d = dict()
@@ -131,18 +137,38 @@ def survey_page(picture_id, iteration):
         d['picture_name'] = picture_data[1]
         d['subject_id'] = picture_data[3]
 
-        fp, ufp = database.get_evaluation_data_for_picture(picture_data[1])
-        d['focused_people'] = fp
-        d['unfocused_people'] = ufp
+        eval_data = database.get_picture_eval_data_by_id(picture_id)
+        d['focused_people'] = eval_data[3]
+        d['unfocused_people'] = eval_data[4]
 
-        if iteration == fp:
-            return redirect(url_for('nf_dispatch', id=id))
+        if int(iteration) > eval_data[3]:
+            return redirect(url_for('nf_dispatch', picture_id=picture_id))
+        else:
+            return render_template('survey.html', d=d)
 
-        return render_template('survey.html', d=d)
 
-
-@app.route('/nf/dispatch/<picture_id>/')
+@app.route('/nf/<picture_id>/')
 def nf_dispatch(picture_id):
+    unfocused = database.get_picture_eval_data_by_id(picture_id)[4]
+
+    if unfocused > 0:
+        return redirect(url_for('nf_instructions', picture_id=picture_id))
+    else:
+        return redirect(url_for('finished', picture_id=picture_id))
+
+
+@app.route('/nf/instructions/<picture_id>/', methods=['GET'])
+def nf_instructions(picture_id):
+    pass
+
+
+@app.route('/nf/survey/<picture_id>/', methods=['GET'])
+def nf_survey_page(picture_id):
+    pass
+
+
+@app.route('/finished/<picture_id>/', methods=['GET'])
+def finished(picture_id):
     pass
 
 
