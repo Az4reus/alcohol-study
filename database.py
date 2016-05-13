@@ -8,15 +8,19 @@ import csv_reading
 
 
 def init_db():
-    c = sq.connect('./alcohol_study.db')
-    cur = c.cursor()
+    try:
+        c = sq.connect('./alcohol_study.db')
+        cur = c.cursor()
 
-    table_query = "SELECT name FROM sqlite_master WHERE type='table';"
+        table_query = "SELECT name FROM sqlite_master WHERE type='table';"
 
-    if not cur.execute(table_query).fetchall():
-        set_up_tables(c)
+        if not cur.execute(table_query).fetchall():
+            set_up_tables(c)
 
-    return c
+        return c
+    except sq.Error:
+        import sys
+        sys.exit(1)
 
 
 def set_up_tables(conn):

@@ -20,7 +20,8 @@
                  class="img-responsive center-block img-thumbnail">
         </div>
         <div class="col-md-4 col-md-offset-1">
-            <form class="form-horizontal" action="{{ url_for('finished', picture_id=d['id']) }}"
+            <form class="form-horizontal"
+                  action="{{ url_for('finished', picture_id=d['id']) }}"
                   method="post">
                 <div class="form-group">
                     <div class="form-group">
@@ -302,6 +303,8 @@
                            name="subject_id">
                     <input type="hidden" value="{{ d['picture_name'] }}"
                            name="picture_name">
+                    <input type="hidden" value="{{ d['id'] }}"
+                           name="id">
                     <input type="submit" value="Submit"
                            class="btn btn-primary">
                 </div>
