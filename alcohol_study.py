@@ -84,6 +84,11 @@ def survey_dispatch():
 
     focused_people = database.get_picture_eval_data_by_id(picture_id)[3]
 
+    try:
+        focused_people = int(focused_people)
+    except ValueError:
+        focused_people = 0
+
     if focused_people > 0:
         return redirect(url_for('survey_instructions', picture_id=picture_id))
     else:
