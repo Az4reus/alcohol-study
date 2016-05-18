@@ -235,7 +235,7 @@ def get_evaluation_data_for_picture(picture_file_name: str):
 
 def upload_csv(files, app_config):
     csv_file = files['upload']
-    filename = str(int(time.time())) + '.csv'
+    filename = '{}.csv'.format(time.time())
     csv_file.save(os.path.join(app_config, filename))
 
     csv_reading.read_data_csv(os.path.join(app_config, filename))
