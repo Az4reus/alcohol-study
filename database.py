@@ -241,30 +241,6 @@ def upload_csv(files, app_config):
     csv_reading.read_data_csv(os.path.join(app_config, filename))
 
 
-def get_evaluations_left(picture_name):
-    conn = init_db()
-    cur = conn.cursor()
-
-    left = cur.execute(
-            '''SELECT count(*)
-               FROM picture_focal_result_data
-               WHERE picture_name = ?''',
-            [picture_name]).fetchall()[0][0]
-
-    focal_subjects = cur.execute(
-            '''SELECT focused_people
-               FROM picture_evaluation_data
-               WHERE picture_name = ?''',
-            [picture_name]).fetchall()[0][0]
-
-    try:
-        focal_subjects = int(focal_subjects)
-    except ValueError:
-        focal_subjects = 0
-
-    return focal_subjects - left
-
-
 def get_picture_by_id(id):
     """Fetches any given picture by its rowID, effectively enumerating
     all pictures.
