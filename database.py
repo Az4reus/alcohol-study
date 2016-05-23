@@ -290,11 +290,9 @@ def save_focal_survey_result(f, iteration):
 
     q1 = f['q1']
     q1_text = ''
-    if q1 == 'A family member':
-        q1_text = f['q1_family_textbox']
 
-    if q1 == 'other':
-        q1_text = f['q1_other_textbox']
+    if q1 == 'A family member' or q1 == 'other':
+        q1_text = f['q1_textbox']
 
     q2 = f['q2']
     if q2 == '':

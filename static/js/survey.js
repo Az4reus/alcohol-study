@@ -13,8 +13,8 @@ var addTextbox = function (id) {
 
         var box = document.createElement("input");
         box.setAttribute('type', 'text');
-        box.setAttribute('name', id + '_textbox');
-        box.setAttribute('id', id + '_textbox');
+        box.setAttribute('name', 'q1_textbox');
+        box.setAttribute('id', 'q1_textbox');
 
         label.appendChild(box);
         e.appendChild(label);
