@@ -2,9 +2,10 @@
 <head>
     <link rel="stylesheet"
           href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
-          integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7"
           crossorigin="anonymous">
     <script src="{{ url_for('static', filename='js/survey.js') }}"
+            type="application/javascript"></script>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"
             type="application/javascript"></script>
     <title>Alcohol Study -- Survey</title>
 </head>
@@ -23,11 +24,20 @@
             <form class="form-horizontal"
                   action="{{ url_for('finished', picture_id=d['id']) }}"
                   method="post">
-                <div class="form-group">
+                <div class="form-group" id="q1_container">
+
                     <div class="form-group">
                         <h3>
                             1. Who are these
-                            <strong>{{ d['unfocused_people'] }}</strong> people?
+                            <strong>{{ d['unfocused_people'] }}</strong> people? <br>
+                            <small>Next to each of
+                                the choices below, indicate the exact number of
+                                people who fall into that category, putting 0’s
+                                where appropriate. Note that all of these
+                                numbers
+                                should together add up
+                                to <strong>{{ d['unfocused_people'] }}</strong>.
+                            </small>
                         </h3>
                     </div>
                     <div class="form-group">
@@ -98,7 +108,8 @@
                         </label>
                     </div>
                 </div>
-                <div class="form-group">
+                <hr>
+                <div class="form-group" id="q2_container">
                     <div class="form-group">
                         <h3>
                             2. Indicate the length of time you have been
@@ -124,7 +135,7 @@
                         <label>
                             <input type="text"
                                    name="q2_less1mo"
-                                   id="q2_less1mp"
+                                   id="q2_less1mo"
                                    value="0" size="1">
                             &lt;1 month
                         </label>
@@ -176,7 +187,8 @@
                     </div>
 
                 </div>
-                <div class="form-group">
+                <hr>
+                <div class="form-group" id="q3_container">
                     <div class="form-group">
                         <h3>
                             3. In total, how many hours would you say you had
@@ -210,8 +222,7 @@
                             <input type="text"
                                    name="q3_2-10"
                                    id="q3_2-10"
-                                   value="0" size="1"
-                                   onclick="addTextbox('q1_family')">
+                                   value="0" size="1">
                             2-10 hours
                         </label>
                     </div>
@@ -305,8 +316,13 @@
                            name="picture_name">
                     <input type="hidden" value="{{ d['id'] }}"
                            name="id">
-                    <input type="submit" value="Submit"
-                           class="btn btn-primary">
+                    <input type="submit" value="Submit" id="actualButton"
+                           class="hidden">
+                    <button type="button"
+                            onclick="validateNfSurveyInputs({{ d['unfocused_people'] }})"
+                            class="btn btn-primary">
+                        Done!
+                    </button>
                 </div>
 
             </form>
