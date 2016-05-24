@@ -13,7 +13,7 @@ def read_data_csv(path_to_csv: str):
             for row in reader:
                 db.insert_picture(
                         c,
-                        extract_name_from_url(row[urlrow]),
+                        extract_file_name_from_url(row[urlrow]),
                         row[urlrow],
                         row['User Id'])
 
@@ -24,12 +24,12 @@ def read_data_csv(path_to_csv: str):
             for row in reader:
                 db.insert_picture(
                         c,
-                        extract_name_from_url(row[urlrow]),
+                        extract_file_name_from_url(row[urlrow]),
                         row[urlrow],
                         row['User Id'])
 
 
-def extract_name_from_url(picture_url: str) -> str:
+def extract_file_name_from_url(picture_url: str) -> str:
     if picture_url is None or picture_url == '':
         return ''
 

@@ -12,7 +12,6 @@ def index():
     d = dict()
     d["is_evaluation_complete"] = True if pics_left == 0 else False
     d["pictures_left"] = pics_left
-    d['user_ids'] = database.get_waiting_user_ids()
     return render_template('index.html', data=d)
 
 
