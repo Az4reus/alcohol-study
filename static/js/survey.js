@@ -33,7 +33,12 @@ var validateSurveyInputs = function () {
     // Q1 needs validation that the textbox is filled when
     // 'family' or 'other' are selected.
     var q1 = $('input[name=q1]:checked').val();
-    if (q1 === 'A family member' || q1 === 'other') {
+
+    if (q1 === undefined) {
+        valid = false;
+        attachAlert('q1_container')
+
+    } else if (q1 === 'A family member' || q1 === 'other') {
         var textbox = $("#q1_textbox");
 
         if (textbox.val() === "") {
@@ -148,7 +153,7 @@ var cleanUpSurvey = function () {
 
 var cleanUpNfSurvey = function () {
     var containers = ['q1_container', 'q2_container', 'q3_container'];
-    for (var i = 0; i < containers.length; i++){
+    for (var i = 0; i < containers.length; i++) {
         $('#' + containers[i]).removeClass('alert').removeClass('alert-danger');
     }
 };
