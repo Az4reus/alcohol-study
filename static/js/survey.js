@@ -4,12 +4,14 @@
 
 var addTextbox = function (id) {
     var e = document.getElementById(id).parentNode;
-    var textbox = document.getElementById(id + '_textbox');
+    var textbox = document.getElementById('q1_textbox');
+    var labelbox = $('#labelBox');
 
     if (textbox == null) {
         var label = document.createElement('label');
         var text = document.createTextNode('Please specify: ');
         label.appendChild(text);
+        label.setAttribute('id', 'labelBox');
 
         var box = document.createElement("input");
         box.setAttribute('type', 'text');
@@ -18,6 +20,9 @@ var addTextbox = function (id) {
 
         label.appendChild(box);
         e.appendChild(label);
+
+    } else if (labelbox !== null && labelbox.parentNode !== e) {
+        e.appendChild(labelbox[0]);
     }
 };
 
