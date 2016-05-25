@@ -29,7 +29,8 @@
                     <div class="form-group">
                         <h3>
                             1. Who are these
-                            <strong>{{ d['unfocused_people'] }}</strong> people? <br>
+                            <strong>{{ d['unfocused_people'] }}</strong> people?
+                            <br>
                             <small>Next to each of
                                 the choices below, indicate the exact number of
                                 people who fall into that category, putting 0’s
@@ -54,7 +55,8 @@
                             <input type="text"
                                    name="q1_family"
                                    id="q1_family"
-                                   value="0" size="1">
+                                   value="0" size="1"
+                                   onclick="addTextbox('q1_family')">
                             A family member
                         </label>
                     </div>
@@ -102,7 +104,8 @@
                         <label>
                             <input type="text" name="q1_stranger" id="q1_other"
                                    value="0"
-                                   size="1">
+                                   size="1"
+                                   onclick="addTextbox('q1_stranger')">
                             Other
                         </label>
                     </div>
