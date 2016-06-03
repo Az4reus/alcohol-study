@@ -227,17 +227,6 @@ def upload_csv():
         return redirect(url_for('index'))
 
 
-@app.route('/dump/', methods=['POST'])
-def dump():
-    return render_template('dump.html', d=request.form)
-
-
-@app.route('/drop/db/', methods=['GET'])
-def drop_database():
-    database.drop_database()
-    return redirect(url_for('upload_csv'))
-
-
 if __name__ == '__main__':
     # app.run(debug=False, port=80, host='0.0.0.0')
     app.run(debug=True)
