@@ -137,7 +137,9 @@ var validateNfSurveyInputs = function (unfocusedPeople) {
 };
 
 var attachAlert = function (elementId) {
-    $('#' + elementId).addClass("alert").addClass('alert-danger');
+    $('#' + elementId)
+        .addClass("alert")
+        .addClass('alert-danger');
 };
 
 var cleanUpSurvey = function () {
@@ -147,13 +149,17 @@ var cleanUpSurvey = function () {
     }
 
     for (var j = 0; j < containers.length; j++) {
-        $('#' + containers[j]).removeClass('alert').removeClass('alert-danger');
+        $('#' + containers[j])
+            .removeClass('alert')
+            .removeClass('alert-danger');
     }
 };
 
 var cleanUpNfSurvey = function () {
     var containers = ['q1_container', 'q2_container', 'q3_container'];
     for (var i = 0; i < containers.length; i++) {
-        $('#' + containers[i]).removeClass('alert').removeClass('alert-danger');
+        $('#' + containers[i])
+            .removeClass('alert')
+            .removeClass('alert-danger');
     }
 };
