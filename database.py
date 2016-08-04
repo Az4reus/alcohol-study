@@ -254,6 +254,14 @@ def get_picture_by_id(id):
     ''', [id]).fetchall()[0]
 
 
+def get_user_id_by_picture_id(picture_id):
+    cur = init_db().cursor()
+
+    return cur\
+        .execute('Select username From pictures where ROWID = ?', [picture_id])\
+        .fetchall()[0][0]
+
+
 def get_picture_eval_data_by_id(id):
     """
     Fetches the evaluation data for the given picture ID.
